@@ -6,3 +6,5 @@ default.nix
 .direnv.*
 *.deb
 *.rpm
+dist
+log

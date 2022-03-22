@@ -74,6 +74,7 @@ func (ps *GrafanaService) SetGrafanaObject() error {
 func (ps *GrafanaService) GrafanaORG() (string, error) {
 
 	grafanaQuery := fmt.Sprintf("%s/api/org", ps.Host)
+	logger.Info("GrafanaORG:", grafanaQuery)
 
 	req, err := http.NewRequest("GET", grafanaQuery, nil)
 
@@ -83,17 +84,21 @@ func (ps *GrafanaService) GrafanaORG() (string, error) {
 	}
 
 	// This one line implements the authentication required for the task.
+	// Some proxy/load balancers (AWS load balancer) return bad request if
+	// basic auth and bearer token are sent together. Sent one or the other only
 	if ps.Password != "" && ps.User != "" {
 		req.SetBasicAuth(ps.User, ps.Password)
+		logger.Info("using basic auth: user=", ps.User)
+	} else {
+		req.Header.Add("Authorization", "Bearer "+ps.Token)
+		logger.Info("using bearer token: Bearer=", ps.Token)
 	}
-
-	req.Header.Add("Authorization", "Bearer "+ps.Token)
 	defer ps.HttpClient.CloseIdleConnections()
 
 	data, err := ps.HttpClient.Do(req)
 	if err != nil {
 		logger.Error("Couldn't make http query:", grafanaQuery)
-		return "", err
+		return "Couldn't make http query:" + grafanaQuery + ", check Advanced Grafana settings", err
 	}
 
 	defer data.Body.Close()
@@ -101,13 +106,13 @@ func (ps *GrafanaService) GrafanaORG() (string, error) {
 	buf, _ := ioutil.ReadAll(data.Body)
 	if err != nil {
 		logger.Error("Couldn't read the data from IO-Buffer")
-		return "", err
+		return "Couldn't read the data from IO-Buffer", err
 	}
 
 	sData, err := gabs.ParseJSON(buf)
 	if err != nil {
 		logger.Error("couldn't encode json body")
-		return "", err
+		return string(buf), err
 	}
 	return sData.String(), nil
 
@@ -126,16 +131,21 @@ func (ps *GrafanaService) GrafanaFolders() (string, error) {
 	}
 
 	// This one line implements the authentication required for the task.
+	// Some proxy/load balancers (AWS load balancer) return bad request if
+	// basic auth and bearer token are sent together. Sent one or the other only
 	if ps.Password != "" && ps.User != "" {
 		req.SetBasicAuth(ps.User, ps.Password)
+		logger.Info("using basic auth: user=", ps.User)
+	} else {
+		req.Header.Add("Authorization", "Bearer "+ps.Token)
+		logger.Info("using bearer token: Bearer=", ps.Token)
 	}
-
-	req.Header.Add("Authorization", "Bearer "+ps.Token)
 	defer ps.HttpClient.CloseIdleConnections()
+
 	data, err := ps.HttpClient.Do(req)
 	if err != nil {
 		logger.Error("Couldn't make http query:", grafanaQuery)
-		return "", err
+		return "Couldn't make http query:" + grafanaQuery, err
 	}
 
 	defer data.Body.Close()
@@ -143,13 +153,13 @@ func (ps *GrafanaService) GrafanaFolders() (string, error) {
 	buf, _ := ioutil.ReadAll(data.Body)
 	if err != nil {
 		logger.Error("Couldn't read the data from IO-Buffer")
-		return "", err
+		return "Couldn't read the data from IO-Buffer", err
 	}
 
 	sData, err := gabs.ParseJSON(buf)
 	if err != nil {
 		logger.Error("couldn't encode json body")
-		return "", err
+		return string(buf), err
 	}
 	return sData.String(), nil
 
@@ -164,20 +174,25 @@ func (ps *GrafanaService) GrafanaGetDashboardByUUUID(uuid string) (string, error
 
 	if err != nil {
 		logger.Error("Couldn't make NewRequest query:", grafanaQuery)
-		return "", err
+		return "Couldn't make NewRequest query:" + grafanaQuery, err
 	}
 
 	// This one line implements the authentication required for the task.
+	// Some proxy/load balancers (AWS load balancer) return bad request if
+	// basic auth and bearer token are sent together. Sent one or the other only
 	if ps.Password != "" && ps.User != "" {
 		req.SetBasicAuth(ps.User, ps.Password)
+		logger.Info("using basic auth: user=", ps.User)
+	} else {
+		req.Header.Add("Authorization", "Bearer "+ps.Token)
+		logger.Info("using bearer token: Bearer=", ps.Token)
 	}
-
-	req.Header.Add("Authorization", "Bearer "+ps.Token)
 	defer ps.HttpClient.CloseIdleConnections()
+
 	data, err := ps.HttpClient.Do(req)
 	if err != nil {
 		logger.Error("Couldn't make http query:", grafanaQuery)
-		return "", err
+		return "Couldn't make http query:" + grafanaQuery, err
 	}
 
 	defer data.Body.Close()
@@ -185,13 +200,13 @@ func (ps *GrafanaService) GrafanaGetDashboardByUUUID(uuid string) (string, error
 	buf, _ := ioutil.ReadAll(data.Body)
 	if err != nil {
 		logger.Error("Couldn't read the data from IO-Buffer")
-		return "", err
+		return "Couldn't read the data from IO-Buffer", err
 	}
 
 	sData, err := gabs.ParseJSON(buf)
 	if err != nil {
 		logger.Error("couldn't encode json body")
-		return "", err
+		return string(buf), err
 	}
 	return sData.String(), nil
 
@@ -206,20 +221,24 @@ func (ps *GrafanaService) GrafanaGetFoldersdByUUUID(uuid string) (string, error)
 
 	if err != nil {
 		logger.Error("Couldn't make NewRequest query:", grafanaQuery)
-		return "", err
+		return "Couldn't make NewRequest query:" + grafanaQuery, err
 	}
 
 	// This one line implements the authentication required for the task.
+	// Some proxy/load balancers (AWS load balancer) return bad request if
+	// basic auth and bearer token are sent together. Sent one or the other only
 	if ps.Password != "" && ps.User != "" {
 		req.SetBasicAuth(ps.User, ps.Password)
+		logger.Info("using basic auth: user=", ps.User)
+	} else {
+		req.Header.Add("Authorization", "Bearer "+ps.Token)
+		logger.Info("using bearer token: Bearer=", ps.Token)
 	}
-
-	req.Header.Add("Authorization", "Bearer "+ps.Token)
 
 	data, err := ps.HttpClient.Do(req)
 	if err != nil {
 		logger.Error("Couldn't make http query:", grafanaQuery)
-		return "", err
+		return "Couldn't make http query:" + grafanaQuery, err
 	}
 
 	defer data.Body.Close()
@@ -233,7 +252,7 @@ func (ps *GrafanaService) GrafanaGetFoldersdByUUUID(uuid string) (string, error)
 	sData, err := gabs.ParseJSON(buf)
 	if err != nil {
 		logger.Error("couldn't encode json body")
-		return "", err
+		return string(buf), err
 	}
 	return sData.String(), nil
 

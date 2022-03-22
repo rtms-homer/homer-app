@@ -10,7 +10,7 @@ debug:
 modules:
 	go get ./...
 
-docker:
+_docker:
 	./scripts/build_docker.sh
 
 package:
@@ -30,3 +30,4 @@ bundle:
 .PHONY: clean
 clean:
 	rm -fr $(NAME)
+

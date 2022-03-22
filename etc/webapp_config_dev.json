@@ -1,0 +1,82 @@
+{
+  "auth_settings": {
+    "_comment": "The type param can be internal, ldap",
+    "jwt_secret": "538ca737-c2f8-47f7-b3c9-0384dc560423",
+    "type": "internal"
+  },
+  "database_config": {
+    "host": "54.183.239.30",
+    "keepalive": false,
+    "name": "homer_config",
+    "pass": "homerSeven",
+    "user": "root"
+  },
+  "database_data": {
+    "local": {
+      "host": "54.183.239.30",
+      "name": "homer_data",
+      "node": "LocalNode",
+      "pass": "homerSeven",
+      "user": "root"
+    }
+  },
+  "grafana_config": {
+    "enable": true,
+    "help": "Settings for Grafana",
+    "host": "http://homer02.rtmslab.net:9031",
+    "path": "/grafana",
+    "token": "eyJrIjoiaEFtUk5tQkVpaVRDWk9zakhDTUtKUmRxZXJ5WU52angiLCJuIjoiaG9tZXJhcGkxIiwiaWQiOjF9"
+  },  
+  "http_settings": {
+    "debug": true,
+    "gzip": true,
+    "gzip_static": false,
+    "help": "Settings for the HOMER Webapp Server. If you have gzip_static = false, please be sure that your dist directory has uncompressed .js files",
+    "host": "0.0.0.0",
+    "path": "/",
+    "port": 9080,
+    "root": "/home/julian/dev/homer-app/dist/homer-ui"
+  },
+  "influxdb_config": {
+    "database": "homer",
+    "host": "http://influx_host:8086",
+    "name": "homer_config",
+    "pass": "influx_pass",
+    "policy": "autogen",
+    "user": "influx_user"
+  },
+  "ldap_config": {
+    "attributes": "\"givenName\", \"sn\", \"mail\", \"uid\"",
+    "base": "dc=example,dc=com",
+    "binddn": "uid=readonlysuer,ou=People,dc=example,dc=com",
+    "bindpassword": "readonlypassword",
+    "groupattribute": "cn",
+    "groupfilter": "(memberUid=%s)",
+    "host": "ldap.example.com",
+    "port": 389,
+    "userfilter": "(uid=%s)",
+    "usessl": false
+  },
+  "loki_config": {
+    "api": "api/prom",
+    "host": "http://loki:3100",
+    "pass": "loki_pass",
+    "user": "loki_user"
+  },
+  "prometheus_config": {
+    "api": "api/v1",
+    "host": "http://prometheus:9090",
+    "pass": "prom_pass",
+    "user": "prom_user"
+  },
+  "system_settings": {
+    "hostname": "LAPTOP-2U14J8DV",
+    "uuid": "33db41c2-77a0-4631-8465-6bbce23aff92",    
+    "help": "Settings for HOMER logs",
+    "logpath": "/home/julian/dev/log",
+    "logname": "homer-app.log",
+    "_loglevels": "can be: fatal, error, warn, info, debug, trace",
+    "loglevel": "info",
+    "logstdout": false
+  }
+}

@@ -1,20 +1,27 @@
 {
   "database_data": {
     "local": {
-      "node": "LocalNode",
-      "user": "homer_user",
-      "pass": "homer_password",
+      "host": "homer_db_host",
       "name": "homer_data",
-      "host": "homer_db_host"
+      "node": "LocalNode",
+      "pass": "homerSeven",
+      "user": "root"
     }
   },
   "database_config": {
-    "user": "homer_user",
-    "pass": "homer_password",
-    "name": "homer_config",
     "host": "homer_db_host",
-    "keepalive": homer_db_keepalive
+    "keepalive": false,
+    "name": "homer_config",
+    "pass": "homerSeven",
+    "user": "root"
   },
+  "grafana_config": {
+    "enable": true,
+    "help": "Settings for Grafana",
+    "host": "http://grafana:3000",
+    "path": "/grafana",
+    "token": "enter API access key created from grafana"
+  },   
   "influxdb_config": {
     "user": "influx_user",
     "pass": "influx_pass",
@@ -36,11 +43,14 @@
     "api": "api/prom"
   },
   "http_settings": {
-    "host": "0.0.0.0",
-    "port": homer_web_port,
-    "root": "/usr/local/homer/dist",
+    "debug": false,
     "gzip": true,
-    "debug": false
+    "gzip_static": false,    
+    "help": "Settings for the HOMER Webapp Server. If you have gzip_static = false, please be sure that your dist directory has uncompressed .js files",    
+    "host": "0.0.0.0",
+    "path": "/",    
+    "port": 80,
+    "root": "/usr/local/homer/dist"
   },
   "system_settings": {
     "logpath": "/usr/local/homer",

@@ -37,6 +37,7 @@ func (pc *GrafanaController) GrafanaURL(c echo.Context) error {
 	responseData, err := pc.GrafanaService.GrafanaURL()
 	if err != nil {
 		logger.Debug(responseData)
+		//we have an error, return error back to client
 		return httpresponse.CreateBadResponse(&c, http.StatusBadRequest, "Grafana service is not configured")
 	}
 	return httpresponse.CreateSuccessResponse(&c, http.StatusCreated, responseData)
@@ -69,7 +70,9 @@ func (pc *GrafanaController) GrafanaORG(c echo.Context) error {
 
 	responseData, err := pc.GrafanaService.GrafanaORG()
 	if err != nil {
-		logger.Debug(responseData)
+		logger.Error(responseData)
+		//we have an error, return error back to client
+		return httpresponse.CreateBadResponse(&c, http.StatusBadRequest, responseData)
 	}
 	return httpresponse.CreateSuccessResponse(&c, http.StatusCreated, responseData)
 }
@@ -101,7 +104,9 @@ func (pc *GrafanaController) GrafanaFolders(c echo.Context) error {
 
 	responseData, err := pc.GrafanaService.GrafanaFolders()
 	if err != nil {
-		logger.Debug(responseData)
+		logger.Error(responseData)
+		//we have an error, return error back to client
+		return httpresponse.CreateBadResponse(&c, http.StatusBadRequest, responseData)
 	}
 	return httpresponse.CreateSuccessResponse(&c, http.StatusCreated, responseData)
 }
@@ -142,7 +147,9 @@ func (pc *GrafanaController) GrafanaGetDashboardAgainstUUID(c echo.Context) erro
 
 	responseData, err := pc.GrafanaService.GrafanaGetDashboardByUUUID(uuidDashboard)
 	if err != nil {
-		logger.Debug(responseData)
+		logger.Error(responseData)
+		//we have an error, return error back to client
+		return httpresponse.CreateBadResponse(&c, http.StatusBadRequest, responseData)
 	}
 	return httpresponse.CreateSuccessResponse(&c, http.StatusCreated, responseData)
 }
@@ -182,7 +189,9 @@ func (pc *GrafanaController) GrafanaGetFoldersAgainstUUID(c echo.Context) error 
 
 	responseData, err := pc.GrafanaService.GrafanaGetFoldersdByUUUID(uuidDashboard)
 	if err != nil {
-		logger.Debug(responseData)
+		logger.Error(responseData)
+		//we have an error, return error back to client
+		return httpresponse.CreateBadResponse(&c, http.StatusBadRequest, responseData)
 	}
 	return httpresponse.CreateSuccessResponse(&c, http.StatusCreated, responseData)
 }

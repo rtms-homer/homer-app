@@ -16,14 +16,18 @@ if ! [ -x "$(command -v docker)" ]; then
   exit 1
 fi
 
-REPO=${REPO:-sipcapture/webapp}
+REPO=${REPO:-362499200679.dkr.ecr.us-east-1.amazonaws.com/hom7-webapp}
 TAG=${TAG:-latest}
 TAG_SLIM=${TAG_SLIM:-slim}
 
-echo "Building HOMER docker ..."
+echo "Building HOMER docker $REPO:$TAG ..."
 docker build --no-cache -t $REPO:$TAG .
+
 if [ ! -z "$PUSH" ]; then
   echo "Pushing $REPO:$TAG ..."
+  #login to AWS ECR, relies on "aws configure" being used to first setup access key ID and secret access key
+  #https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html
+  aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 362499200679.dkr.ecr.us-east-1.amazonaws.com
   docker push $REPO:$TAG
 fi
 if [ ! -z "$SLIM" ]; then
