@@ -8,3 +8,4 @@ default.nix
 *.rpm
 dist
 log
+__debug_bin

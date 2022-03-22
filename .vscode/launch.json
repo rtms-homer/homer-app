@@ -9,9 +9,9 @@
             "WEBAPPENV": "dev"
         },
         "args": [
-            "-webapp-config-path=./etc",
+            "-webapp-config-path=../config",
             "-webapp-log-name=webapp-log",
-            "-webapp-log-path=./log"
+            "-webapp-log-path=../log"
         ],
         "name": "Launch Package",
         "type": "go",
