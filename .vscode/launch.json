@@ -6,7 +6,8 @@
     "configurations": [
     {
         "env": {
-            "WEBAPPENV": "dev"
+            //"WEBAPPENV": "dev"
+            "WEBAPPENV": "local"
         },
         "args": [
             "-webapp-config-path=../config",

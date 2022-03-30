@@ -694,6 +694,14 @@ func configureAsHTTPServer() {
 		config.Setting.GRAFANA_SETTINGS.AuthKey = viper.GetString("grafana_config.token")
 	}
 
+	if viper.IsSet("grafana_config.user") {
+		config.Setting.GRAFANA_SETTINGS.User = viper.GetString("grafana_config.user")
+	}
+
+	if viper.IsSet("grafana_config.pass") {
+		config.Setting.GRAFANA_SETTINGS.Password = viper.GetString("grafana_config.pass")
+	}
+
 	// Reverse Proxy
 	url1, err := url.Parse(config.Setting.GRAFANA_SETTINGS.URL)
 	if err != nil {
@@ -1803,7 +1811,14 @@ func initDB() {
 func GrafanaHeader(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		if strings.HasPrefix(c.Request().RequestURI, config.Setting.GRAFANA_SETTINGS.Path) {
-			c.Request().Header.Add("Authorization", "Bearer "+config.Setting.GRAFANA_SETTINGS.AuthKey)
+			//allow Basic Auth or Bearer token to authenticate. When using multiple Grafana server's Basic Auth
+			//will allow access using a common user/password. Bearer token is more difficult as each server has
+			//a unique token.
+			if config.Setting.GRAFANA_SETTINGS.User != "" && config.Setting.GRAFANA_SETTINGS.Password != "" {
+				c.Request().SetBasicAuth(config.Setting.GRAFANA_SETTINGS.User, config.Setting.GRAFANA_SETTINGS.Password)
+			} else {
+				c.Request().Header.Add("Authorization", "Bearer "+config.Setting.GRAFANA_SETTINGS.AuthKey)
+			}
 		}
 		return next(c)
 	}
